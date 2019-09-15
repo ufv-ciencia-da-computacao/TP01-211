@@ -5,15 +5,15 @@
 #include <stdlib.h>
 
 typedef struct node_t * Node;
-
+typedef double Item;
 struct node_t {
   Node next_right;
   Node next_below;
   int line, col;
-  double value;
+  Item value;
 };
 
-static void nodeCreate(Node *node);
+void nodeCreate(Node *node, int line, int col, double value);
 
 void nodeInit(Node *node);
 void nodeConstructSpMatrixLine(Node *node, int line, int col);
