@@ -31,7 +31,7 @@ void nodeConstructSpMatrixColumn(Node *node, int line, int col) {
   Node auxNode;
   Node iterator = *node;
   for (int i = 1; i <= col; i++) {
-    nodeCreate(&node, -1, (-1) * col, 0);
+    nodeCreate(&auxNode, -1, (-1) * col, 0);
     iterator->next_right = &auxNode;
     iterator->next_below = &auxNode;
     iterator = iterator->next_right;
@@ -40,7 +40,52 @@ void nodeConstructSpMatrixColumn(Node *node, int line, int col) {
   iterator->next_right = node;
 }
 
-void nodeInsert(Node *node, int line, int col, Item value);
+Node nodeDiscoverFirstCol(Node *node, int col) {
+  Node iterator = *node;
+  Node auxFirstCol;
+
+  do {
+    if (abs(iterator->col) == col) {
+      auxFirstCol = iterator;
+      break;
+    } else {
+      iterator = iterator->next_right; 
+    }
+  } while (iterator->next_right->col != -1 && iterator->next_right->line != -1);
+
+  return auxFirstCol;
+}
+
+Node nodeDiscoverFirstLine(Node *node, int line) {
+  Node iterator = *node;
+  Node auxFirstLine;
+
+  do {
+    if (abs(iterator->line) == line) {
+      auxFirstLine = iterator;
+      break;
+    } else {
+      iterator = iterator->next_below; 
+    }
+  } while(iterator->next_below->col != -1 && iterator->next_below->line != -1);
+
+  return auxFirstLine;
+}
+
+void nodeInsert(Node *node, int line, int col, Item value) {
+  Node iterator;
+
+  Node auxFirstCol = nodeDiscoverFirstCol(node, col);
+  Node auxFirstLine = nodeDiscoverFirstLine(node, line);
+
+  Node createdNode;
+  nodeCreate(&createdNode, line, col, value);
+
+  iterator = auxFirstCol;
+  // traverse matrix TODO
+    
+}
+
 void nodeRemove(Node *node, int line, int col);
 void nodeFree(Node *node) {
   if((*node) == NULL) {

@@ -13,12 +13,14 @@ struct node_t {
   Item value;
 };
 
-void nodeCreate(Node *node, int line, int col, double value);
+void nodeCreate(Node *node, int line, int col, Item value);
 
 void nodeInit(Node *node);
 void nodeConstructSpMatrixLine(Node *node, int line, int col);
 void nodeConstructSpMatrixColumn(Node *node, int line, int col);
-void nodeInsert(Node *node, int line, int col, double value);
+Node nodeDiscoverFirstCol(Node *node, int col);
+Node nodeDiscoverFirstLine(Node *node, int line);
+void nodeInsert(Node *node, int line, int col, Item value);
 void nodeRemove(Node *node, int line, int col);
 void nodeFree(Node *node);
 
