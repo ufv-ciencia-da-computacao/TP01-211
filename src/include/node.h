@@ -3,7 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+
+#define true 1
+#define false 0
 
 typedef struct node_t * Node;
 typedef double Item;
@@ -17,8 +19,8 @@ struct node_t {
 void nodeCreate(Node *node, int line, int col, Item value);
 
 void nodeInit(Node *node);
-void nodeConstructSpMatrixLine(Node *node, int line, int col);
-void nodeConstructSpMatrixColumn(Node *node, int line, int col);
+void nodeConstructSpMatrixLine(Node *node, int line);
+void nodeConstructSpMatrixColumn(Node *node, int col);
 Node nodeDiscoverFirstCol(Node *node, int col);
 Node nodeDiscoverFirstLine(Node *node, int line);
 void nodeInsert(Node *node, int line, int col, Item value);

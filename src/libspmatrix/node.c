@@ -68,35 +68,31 @@ Node nodeDiscoverFirstLine(Node *node, int line) {
   return auxFirstLine;
 }
 
-void nodeInsert(Node *node, int line, int col, Item value) {
+void nodeInsertCol(Node *node, Node *createdNode, int col) {
   Node iterator;
   Node prev, next;
 
   Node auxFirstCol = nodeDiscoverFirstCol(node, col);
-  Node auxFirstLine = nodeDiscoverFirstLine(node, line);
-
-  Node createdNode;
-  nodeCreate(&createdNode, line, col, value);
 
   iterator = auxFirstCol;
   next = iterator->next_below;
   while(true) {
 
-    if(iterator->line > createdNode->line) {
-      prev->next_below = createdNode;
-      createdNode->next_below = iterator;
+    if(iterator->line > (*createdNode)->line) {
+      prev->next_below = (*createdNode);
+      (*createdNode)->next_below = iterator;
       break;
     }
     
-    if(iterator->line == createdNode->line) {
-      iterator->value = createdNode->value;
+    if(iterator->line == (*createdNode)->line) {
+      iterator->value = (*createdNode)->value;
       nodeFree(&createdNode);
       break;
     }
 
     if(next->line == auxFirstCol->line) {
-      iterator->next_below = createdNode;
-      createdNode->next_below = next;
+      iterator->next_below = (*createdNode);
+      (*createdNode)->next_below = next;
       break;
     }
 
@@ -104,7 +100,42 @@ void nodeInsert(Node *node, int line, int col, Item value) {
     iterator = next;
     next = iterator->next_below;
   }
-    
+}
+
+void nodeInsertLine(Node *node, Node *createdNode, int line) {
+  Node iterator;
+  Node prev, next;
+
+  Node auxFirstLine = nodeDiscoverFirstLine(node, line);
+  
+  iterator = auxFirstLine;
+  next = iterator->next_right;
+
+  while (true) {
+    if(iterator->col > (*createdNode)->col) {
+      prev->next_right = (*createdNode);
+      (*createdNode)->next_right = iterator;
+      break;
+    }
+
+    if (next->col == auxFirstLine->col) {
+      iterator->next_right = (*createdNode);
+      (*createdNode)->next_right = next;
+      break;
+    }
+
+    prev = iterator;
+    iterator = next;
+    next = iterator->next_right;
+  }
+}
+
+void nodeInsert(Node *node, int line, int col, Item value) {
+  Node createdNode;
+  nodeCreate(&createdNode, line, col, value);
+
+  nodeInsertCol(node, &createdNode, col);
+  nodeInsertLine(node, &createdNode, line);    
 }
 
 void nodeRemove(Node *node, int line, int col);
