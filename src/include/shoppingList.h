@@ -2,6 +2,8 @@
 #define __SHOPPING_LIST_H__
 
 #include "shopping.h"
+#include <stdio.h>
+#include <string.h>
 
 typedef struct shoppingList_t * ShoppingList;
 struct shoppingList_t {
@@ -11,5 +13,6 @@ struct shoppingList_t {
 
 int shoppingListInit(ShoppingList *slist);
 int shoppingListInsert(ShoppingList *slist, Shopping shop);
+int shoppingListToString(ShoppingList *slist, char str[]);
 
 #endif

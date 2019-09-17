@@ -39,10 +39,10 @@ int shoppingInit(Shopping *shop, int day, int month,  int year, int qttProducts)
   return 0;
 }
 
-int shoppingToString(Shopping *shop, char str[]) {
+int shoppingToString(Shopping shop, char str[]) {
   int day;
   int month;
-  dayOfYearToDate(shop->dayOfYear, &day, &month, shop->year);
-  sprintf(str, "%.2d/%.2d/%.4d\t%d\n", day, month, shop->year, shop->qttProducts); 
+  dayOfYearToDate(shop.dayOfYear, &day, &month, shop.year);
+  sprintf(str, "%.2d/%.2d/%.4d\t%d\n", day, month, shop.year, shop.qttProducts); 
   return 0;
 }

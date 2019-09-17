@@ -12,6 +12,6 @@ typedef struct shopping_t {
 } Shopping;
 
 int shoppingInit(Shopping *shop, int day, int month,  int year, int qttProducts);
-int shoppingToString(Shopping *shop, char string[]);
+int shoppingToString(Shopping shop, char str[]);
 
 #endif
