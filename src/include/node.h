@@ -16,15 +16,19 @@ struct node_t {
   Item value;
 };
 
-void nodeCreate(Node *node, int line, int col, Item value);
+#pragma region RegionGetters
+int nodeGetLine(Node *node);
+int nodeGetColumn(Node *node);
+Item nodeGetItem(Node *node);
+#pragma endregion RegionGetters
 
-void nodeInit(Node *node);
-void nodeConstructSpMatrixLine(Node *node, int line);
-void nodeConstructSpMatrixColumn(Node *node, int col);
-Node nodeDiscoverFirstCol(Node *node, int col);
-Node nodeDiscoverFirstLine(Node *node, int line);
-void nodeInsert(Node *node, int line, int col, Item value);
-void nodeRemove(Node *node, int line, int col);
+#pragma region RegionSetters
+void nodeSetLine(Node *node, int line);
+void nodeSetCol(Node *node, int col);
+void nodeSetItem(Node *node, Item value);
+#pragma endregion RegionSetters
+
+void nodeInit(Node *node, int line, int col, Item value);
 void nodeFree(Node *node);
 
 #endif

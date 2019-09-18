@@ -1,147 +1,46 @@
-#include "include/node.h"
+#include "../include/node.h"
 
-void nodeCreate(Node *node, int line, int col, Item value) {
-  (*node) = (Node) malloc (sizeof(Node));
+#pragma region RegionGetters
+int nodeGetLine(Node *node) {
+  return (*node)->line;
+}
+
+int nodeGetColumn(Node *node) {
+  return (*node)->col;
+}
+
+Item nodeGetItem(Node *node) {
+  return (*node)->value;
+}
+#pragma endregion RegionGetters
+
+#pragma region RegionSetters
+void nodeSetLine(Node *node, int line) {
+  (*node)->line = line;
+}
+
+void nodeSetCol(Node *node, int col) {
+  (*node)->col = col;
+}
+
+void nodeSetItem(Node *node, Item value) {
+  (*node)->value = value;
+}
+#pragma endregion RegionSetters
+
+void nodeInit(Node *node, int line, int col, Item value) {
+  (*node) = (Node) malloc (sizeof(struct node_t));
   (*node)->line = line;
   (*node)->col = col;
-  (*node)->next_right = &node;
-  (*node)->next_below = &node;
+  (*node)->next_right = *node;
+  (*node)->next_below = *node;
   (*node)->value = value;
 }
 
-void nodeInit(Node *node) {
-  *node = NULL;
-}
-
-void nodeConstructSpMatrixLine(Node *node, int line) {
-  Node auxNode;
-  Node iterator = (*node);
-
-  for (int i = 2; i <= line+1; i++) {
-    nodeCreate(&auxNode, (-1) * line, -1, 0);
-    iterator->next_below = auxNode;
-    iterator = iterator->next_below;
-  }
-  iterator->next_below = node;
-}
-
-void nodeConstructSpMatrixColumn(Node *node, int col) {
-  Node auxNode;
-  Node iterator = (*node);
-  for (int i = 2; i <= col+1; i++) {
-    nodeCreate(&auxNode, -1, (-1) * col, 0);
-    iterator->next_right = auxNode;
-    iterator = iterator->next_right;
-  }  
-  iterator->next_right = node;
-}
-
-Node nodeDiscoverFirstCol(Node *node, int col) {
-  Node iterator = (*node);
-  Node auxFirstCol;
-
-  do {
-    if (abs(iterator->col)-1 == col) {
-      auxFirstCol = iterator;
-      break;
-    } else {
-      iterator = iterator->next_right; 
-    }
-  } while (iterator->next_right->col != -1 && iterator->next_right->line != -1);
-
-  return auxFirstCol;
-}
-
-Node nodeDiscoverFirstLine(Node *node, int line) {
-  Node iterator = (*node);
-  Node auxFirstLine;
-
-  do {
-    if (abs(iterator->line) == line) {
-      auxFirstLine = iterator;
-      break;
-    } else {
-      iterator = iterator->next_below; 
-    }
-  } while(iterator->next_below->col != -1 && iterator->next_below->line != -1);
-
-  return auxFirstLine;
-}
-
-void nodeInsertCol(Node *node, Node *createdNode, int col) {
-  Node iterator;
-  Node prev, next;
-
-  Node auxFirstCol = nodeDiscoverFirstCol(node, col);
-
-  iterator = auxFirstCol;
-  next = iterator->next_below;
-  while(true) {
-
-    if(iterator->line > (*createdNode)->line) {
-      prev->next_below = (*createdNode);
-      (*createdNode)->next_below = iterator;
-      break;
-    }
-    
-    if(iterator->line == (*createdNode)->line) {
-      iterator->value = (*createdNode)->value;
-      nodeFree(&createdNode);
-      break;
-    }
-
-    if(next->line == auxFirstCol->line) {
-      iterator->next_below = (*createdNode);
-      (*createdNode)->next_below = next;
-      break;
-    }
-
-    prev = iterator;
-    iterator = next;
-    next = iterator->next_below;
-  }
-}
-
-void nodeInsertLine(Node *node, Node *createdNode, int line) {
-  Node iterator;
-  Node prev, next;
-
-  Node auxFirstLine = nodeDiscoverFirstLine(node, line);
-  
-  iterator = auxFirstLine;
-  next = iterator->next_right;
-
-  while (true) {
-    if(iterator->col > (*createdNode)->col) {
-      prev->next_right = (*createdNode);
-      (*createdNode)->next_right = iterator;
-      break;
-    }
-
-    if (next->col == auxFirstLine->col) {
-      iterator->next_right = (*createdNode);
-      (*createdNode)->next_right = next;
-      break;
-    }
-
-    prev = iterator;
-    iterator = next;
-    next = iterator->next_right;
-  }
-}
-
-void nodeInsert(Node *node, int line, int col, Item value) {
-  Node createdNode;
-  nodeCreate(&createdNode, line, col, value);
-
-  nodeInsertCol(node, &createdNode, col);
-  nodeInsertLine(node, &createdNode, line);    
-}
-
-void nodeRemove(Node *node, int line, int col);
 void nodeFree(Node *node) {
   if((*node) == NULL) {
-    return 0;
+    return;
   }
   free((*node));
+  *node = NULL;
 }
