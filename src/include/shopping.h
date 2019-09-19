@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "date.h"
+
 typedef struct shopping_t {
   int dayOfYear;
   int year;
