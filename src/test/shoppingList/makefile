@@ -1,7 +1,10 @@
 all: shoppingList_main clear
 
-shoppingList_main: shopping.o shoppingList.o shoppingList_main.o
-	gcc shoppingList_main.o shopping.o shoppingList.o -o shoppingList_main
+shoppingList_main: date.o shopping.o shoppingList.o shoppingList_main.o
+	gcc shoppingList_main.o date.o shopping.o shoppingList.o -o shoppingList_main
+
+date.o: ../../libspmatrix/date.c
+	gcc -c ../../libspmatrix/date.c -o date.o
 
 shopping.o: ../../libspmatrix/shopping.c
 	gcc -c ../../libspmatrix/shopping.c -o shopping.o

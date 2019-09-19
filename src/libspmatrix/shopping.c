@@ -1,25 +1,22 @@
 #include "../include/shopping.h"
 
-static int verifyQttProducts(int qttProducts);
-
-static int verifyQttProducts(int qttProducts) {
-  return (qttProducts > 0);
+Date shoppingGetDate(Shopping shop) {
+  return shop.date;
 }
 
-int shoppingInit(Shopping *shop, int day, int month,  int year, int qttProducts) {
-  if(!verifyDate(day, month, year) || !verifyQttProducts(qttProducts)) {
-    return 1;
-  }
-  dateToDayOfYear(&(shop->dayOfYear), day, month-1, year);
-  shop->year = year;
+int shoppingSetDate(Shopping *shop, Date date) {
+  shop->date = date;
+  return 0;
+}
+
+int shoppingInit(Shopping *shop, Date date, int qttProducts) {
+  shop->date = date;
   shop->qttProducts = qttProducts;
   return 0;
 }
 
-int shoppingToString(Shopping shop, char str[]) {
-  int day;
-  int month;
-  dayOfYearToDate(shop.dayOfYear, &day, &month, shop.year);
-  sprintf(str, "%.2d/%.2d/%.4d\t%d\n", day, month, shop.year, shop.qttProducts); 
+int shoppingToString(Shopping *shop, char str[]) {
+  sprintf(str, "%.2d/%.2d/%.4d\t%d\n", dateGetDay(shop->date), dateGetMonth(shop->date), 
+  dateGetYear(shop->date), shop->qttProducts);
   return 0;
 }

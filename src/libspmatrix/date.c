@@ -1,28 +1,61 @@
 #include "../include/date.h"
 
-int dateToDayOfYear(int *dayOfYear, int day, int month, int year) {
+#pragma region RegionGetters
+int dateGetDay(Date date) {
+  return date.day;
+}
+
+int dateGetMonth(Date date) {
+  return date.month;
+}
+
+int dateGetYear(Date date) {
+  return date.year;
+}
+#pragma endregion RegionGetters
+
+#pragma region RegionSetters
+void dateSetDay(Date *date, int day) {
+  date->day = day;
+}
+
+void dateSetMonth(Date *date, int month) {
+  date->month = month;
+}
+
+void dateSetYear(Date *date, int year) {
+  date->year = year;
+}
+#pragma endregion RegionSetters
+
+int dateInit(Date *date, int day, int month, int year) {
+  date->day = day;
+  date->month = month;
+  date->year = year;
+}
+
+int dateToDayOfYear(Date date) { 
   int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-  if(isLeapYear(year)) daysInMonth[1] = 29;
+  if(isLeapYear(date)) daysInMonth[1] = 29;
 
   int i;
   int daysPassed = 0;
-  for(i=0; i<month; i++) {
+  for(i=0; i<dateGetMonth(date); i++) {
     daysPassed += daysInMonth[i];
   }
-  *dayOfYear = daysPassed + day;
-  return 0;
+  return daysPassed + dateGetDay(date);
 }
 
-int dayOfYearToDate(int dayOfYear, int *day, int *month, int year) {
+int dayOfYearToDate(Date *date, int dayOfYear) {
   int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-  if(isLeapYear(year)) daysInMonth[1] = 29;
+  if(isLeapYear(*date)) daysInMonth[1] = 29;
 
   int i;
   int totalDays = 0;
   for(i=0; i<12; i++) {
     if(dayOfYear <= totalDays + daysInMonth[i]) {
-      *day = dayOfYear - totalDays;
-      *month = i+1;
+      dateSetDay(date, dayOfYear - totalDays);
+      dateSetMonth(date, i+1);
       break;
     }
     totalDays += daysInMonth[i];
@@ -31,15 +64,15 @@ int dayOfYearToDate(int dayOfYear, int *day, int *month, int year) {
   return 0;
 }
 
-int verifyDate(int day, int month, int year) {
+int verifyDate(Date date) {
   int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-  if(isLeapYear(year)) daysInMonth[1] = 29;
-  if(!(0 < year && year <= 9999)) return 0;
-  if(!(1 <= month && month <= 12)) return 0;
-  if(!(1 <= day && day <= daysInMonth[month-1])) return 0;
+  if(isLeapYear(date)) daysInMonth[1] = 29;
+  if(!(1 <= dateGetYear(date) && dateGetYear(date) <= 9999)) return 0;
+  if(!(1 <= dateGetMonth(date) && dateGetMonth(date) <= 12)) return 0;
+  if(!(1 <= dateGetDay(date) && dateGetDay(date) <= daysInMonth[dateGetMonth(date)-1])) return 0;
   return 1;
 }
 
-int isLeapYear(int year) {
-  return (year % 4 == 0 && year % 100 != 0 || year % 400 == 0);
+int isLeapYear(Date date) {
+  return (dateGetYear(date) % 4 == 0 && dateGetYear(date) % 100 != 0 || dateGetYear(date) % 400 == 0);
 }

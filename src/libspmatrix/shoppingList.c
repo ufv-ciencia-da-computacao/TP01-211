@@ -22,7 +22,8 @@ int shoppingListInit(ShoppingList *slist) {
 
 int shoppingListInsert(ShoppingList *slist, Shopping shop) {
   ShoppingList iterator = *slist;
-  ShoppingList prev, next;
+  ShoppingList prev = NULL;
+  ShoppingList next = NULL;
   ShoppingList new;
   shoppingListCreate(&new, shop);
 
@@ -34,43 +35,47 @@ int shoppingListInsert(ShoppingList *slist, Shopping shop) {
   while(iterator != NULL) {
     next = iterator->next;
     
-    if((new->shop).year > (iterator->shop).year) {
+    if(dateGetYear(shoppingGetDate(new->shop)) > dateGetYear(shoppingGetDate(iterator->shop))) {
       if(next == NULL) {
         iterator->next = new;
         break;
-      } else if((new->shop).year < (next->shop).year) {
+      } else if(dateGetYear(shoppingGetDate(new->shop)) < dateGetYear(shoppingGetDate(next->shop))) {
         new->next = next;
         iterator->next = new;
         break;
       }
     }
 
-    if((new->shop).year == (iterator->shop).year) {
-      if((new->shop).dayOfYear > (iterator->shop).dayOfYear) {
+    if(dateGetYear(shoppingGetDate(new->shop)) == dateGetYear(shoppingGetDate(iterator->shop))) {
+      if(dateToDayOfYear(shoppingGetDate(new->shop)) > dateToDayOfYear(shoppingGetDate(iterator->shop))) {
         if(next == NULL) {
           iterator->next = new;
           break;
-        } else if((new->shop).dayOfYear < (next->shop).dayOfYear) {
+        } else if(dateToDayOfYear(shoppingGetDate(new->shop)) < dateToDayOfYear(shoppingGetDate(next->shop))) {
           new->next = next;
           iterator->next = new;
           break;
         }
       }
 
-      if((new->shop).dayOfYear == (iterator->shop).dayOfYear) {
+      if(dateToDayOfYear(shoppingGetDate(new->shop)) == dateToDayOfYear(shoppingGetDate(iterator->shop))) {
         (iterator->shop).qttProducts += (new->shop).qttProducts;
         shoppingListFree(&new);
         break;
       }
 
-      if((new->shop).dayOfYear < (iterator->shop).dayOfYear) {
+      if(dateToDayOfYear(shoppingGetDate(new->shop)) < dateToDayOfYear(shoppingGetDate(iterator->shop))) {
         new->next = iterator;
-        prev->next = new;
+        if(prev == NULL) {
+          *slist = new;
+        } else {
+          prev->next = new;
+        }
         break;
       }
     }
 
-    if((new->shop).year < (iterator->shop).year) {
+    if(dateGetYear(shoppingGetDate(new->shop)) < dateGetYear(shoppingGetDate(iterator->shop))) {
       new->next = iterator;
       *slist = new;
       break;
@@ -91,7 +96,7 @@ int shoppingListToString(ShoppingList *slist, char str[]) {
   char shopStr[128];
 
   while(iterator != NULL) {
-    shoppingToString(iterator->shop, shopStr);
+    shoppingToString(&(iterator->shop), shopStr);
     strcat(str, shopStr);
     iterator = iterator->next;
   }

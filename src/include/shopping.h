@@ -8,12 +8,19 @@
 #include "date.h"
 
 typedef struct shopping_t {
-  int dayOfYear;
-  int year;
+  Date date;
   int qttProducts;
 } Shopping;
 
-int shoppingInit(Shopping *shop, int day, int month,  int year, int qttProducts);
-int shoppingToString(Shopping shop, char str[]);
+#pragma region RegionGetters
+Date shoppingGetDate(Shopping shop);
+#pragma endregion RegionGetters
+
+#pragma region RegionSetters
+int shoppingSetDate(Shopping *shop, Date date);
+#pragma endregion RegionSetters
+
+int shoppingInit(Shopping *shop, Date date, int qttProducts);
+int shoppingToString(Shopping *shop, char str[]);
 
 #endif
