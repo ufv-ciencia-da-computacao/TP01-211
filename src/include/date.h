@@ -1,6 +1,8 @@
 #ifndef __DATE_H__
 #define __DATE_H__
 
+#include <stdio.h>
+
 typedef struct date_t {
   int day;
   int month;
@@ -21,8 +23,8 @@ void dateSetYear(Date *date, int year);
 
 int dateInit(Date *date, int day, int month, int year);
 int dateToDayOfYear(Date date);
-int dayOfYearToDate(Date *date, int dayOfYear);
-int verifyDate(Date date);
-int isLeapYear(Date date);
+int dateFromDayOfYear(Date *date, int dayOfYear);
+int dateVerify(Date date);
+int dateToString(Date *date, char str[]);
 
 #endif

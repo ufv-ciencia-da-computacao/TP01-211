@@ -98,6 +98,7 @@ int shoppingListToString(ShoppingList *slist, char str[]) {
   while(iterator != NULL) {
     shoppingToString(&(iterator->shop), shopStr);
     strcat(str, shopStr);
+    strcat(str, "\n");
     iterator = iterator->next;
   }
 
