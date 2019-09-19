@@ -3,9 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#define true 1
-#define false 0
+#include <stdbool.h>
 
 typedef struct node_t * Node;
 typedef double Item;

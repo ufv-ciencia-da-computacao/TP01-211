@@ -4,6 +4,7 @@ int main() {
   SpMatrix matrix;
 
   spMatrixInit(&matrix, 4, 4);
+ 
   spMatrixInsert(&matrix, 1, 1, 50);
   spMatrixInsert(&matrix, 2, 1, 10);
   spMatrixInsert(&matrix, 2, 3, 20);
@@ -13,5 +14,5 @@ int main() {
 
   spMatrixToString(&matrix);
 
-  // spMatrixFree(&matrix);
+  spMatrixFree(&matrix);
 }

@@ -2,16 +2,17 @@
 #define __SP_MATRIX_H__
 
 #include "node.h"
+#include <string.h>
+#include <stdio.h>
 
-typedef unsigned int uint;
 typedef struct {
   Node head;
-  uint lin, col; 
+  int lin, col; 
 } SpMatrix;
 
 void spMatrixInit(SpMatrix *spMatrix, int lin, int col);
 void spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value);
-void spMatrixToString(SpMatrix *spMatrix);
+void spMatrixToString(SpMatrix *spMatrix /*, char str[]*/);
 void spMatrixFree(SpMatrix *spMatrix);
 
 #endif
