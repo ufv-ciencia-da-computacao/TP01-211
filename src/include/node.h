@@ -26,7 +26,10 @@ void nodeSetCol(Node *node, int col);
 void nodeSetItem(Node *node, Item value);
 #pragma endregion RegionSetters
 
-void nodeInit(Node *node, int line, int col, Item value);
-void nodeFree(Node *node);
+int nodeInit(Node *node, int line, int col, Item value);
+int nodeFree(Node *node);
+
+int nodeItemEquals(Node a, Node b);
+int spMatrixItemIsValid(Node a);
 
 #endif

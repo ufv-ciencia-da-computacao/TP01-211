@@ -119,20 +119,24 @@ static void spMatrixInsertLine(SpMatrix *spMatrix, Node *createdNode, int line) 
   }
 }
 
-void spMatrixInit(SpMatrix *spMatrix, int lin, int col) {
+int spMatrixInit(SpMatrix *spMatrix, int lin, int col) {
   nodeInit(&spMatrix->head, -1, -1, 0);
   spMatrix->lin = lin;
   spMatrix->col = col;
   spMatrixConstructLine(spMatrix);
   spMatrixConstructColumn(spMatrix);
+  
+  return 0;
 }
 
-void spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value) {
+int spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value) {
   Node createdNode;
   nodeInit(&createdNode, line, col, value);
 
   spMatrixInsertCol(spMatrix, &createdNode, col);
   spMatrixInsertLine(spMatrix, &createdNode, line); 
+
+  return 0;
 }
 
 void spMatrixToString(SpMatrix *spMatrix/*, char str[]*/) {
@@ -156,10 +160,12 @@ void spMatrixToString(SpMatrix *spMatrix/*, char str[]*/) {
     }
     //// strcat(str, "\n");
     printf("\n");
-  }        
+  }  
+
+  return 0;      
 }
 
-void spMatrixFree(SpMatrix *spMatrix) {
+int spMatrixFree(SpMatrix *spMatrix) {
   Node prev;
   Node elem; 
   Node firstCol, firstLine;
@@ -181,4 +187,14 @@ void spMatrixFree(SpMatrix *spMatrix) {
     nodeFree(&firstLine);
   }
   nodeFree(&spMatrix->head);
+
+  return 0;
+}
+
+int spMatrixLinOutOfBounds(SpMatrix *spMatrix, int line) {
+  return 1 ? spMatrix->lin < line : 0;
+}
+
+int spMatrixColOutOfBounds(SpMatrix *spMatrix, int col) {
+    return 1 ? spMatrix->col < col : 0;
 }

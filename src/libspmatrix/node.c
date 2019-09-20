@@ -28,19 +28,32 @@ void nodeSetItem(Node *node, Item value) {
 }
 #pragma endregion RegionSetters
 
-void nodeInit(Node *node, int line, int col, Item value) {
+int nodeInit(Node *node, int line, int col, Item value) {
   (*node) = (Node) malloc (sizeof(struct node_t));
   (*node)->line = line;
   (*node)->col = col;
   (*node)->next_right = *node;
   (*node)->next_below = *node;
   (*node)->value = value;
+
+  return 0;
 }
 
-void nodeFree(Node *node) {
+int nodeFree(Node *node) {
   if((*node) == NULL) {
-    return;
+    return 1;
   }
   free((*node));
   *node = NULL;
+
+  return 1;
 }
+
+int nodeItemEquals(Node a, Node b) {
+  return 1 ? a->value == b->value : 0;
+}
+
+int spMatrixItemIsValid(Node a) {
+  return 1 ? (a->line > 0 && a->col > 0) : 0;
+}
+
