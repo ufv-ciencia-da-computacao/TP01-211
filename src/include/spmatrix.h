@@ -1,11 +1,11 @@
-#ifndef __SP_MATRIX_H__
-#define __SP_MATRIX_H__
+#ifndef __SPMATRIX_H__
+#define __SPMATRIX_H__
 
 #include "node.h"
 #include <string.h>
 #include <stdio.h>
 
-typedef struct {
+typedef struct spmatrix_t {
   Node head;
   int lin, col; 
 } SpMatrix;

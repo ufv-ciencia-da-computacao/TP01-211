@@ -161,8 +161,6 @@ void spMatrixToString(SpMatrix *spMatrix/*, char str[]*/) {
     //// strcat(str, "\n");
     printf("\n");
   }  
-
-  return 0;      
 }
 
 int spMatrixFree(SpMatrix *spMatrix) {

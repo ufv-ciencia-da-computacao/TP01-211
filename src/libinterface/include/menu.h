@@ -1,5 +1,5 @@
-#ifndef __INTERFACE_H__
-#define __INTERFACE_H__
+#ifndef __MENU_H__
+#define __MENU_H__
 
 #include "../../include/spmatrix.h"
 
