@@ -25,5 +25,4 @@ int shoppingSetQttProducts(Shopping *shop, int qttProducts);
 int shoppingInit(Shopping *shop, Date date, int qttProducts);
 int shoppingToString(Shopping *shop, char str[]);
 int shoppingVerify(Shopping shop);
-
 #endif

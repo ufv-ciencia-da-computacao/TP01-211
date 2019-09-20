@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "./shoppingList.h"
 
 typedef struct node_t * Node;
-typedef double Item;
+typedef ShoppingList Item;
 struct node_t {
   Node next_right;
   Node next_below;

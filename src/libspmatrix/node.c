@@ -43,6 +43,7 @@ int nodeFree(Node *node) {
   if((*node) == NULL) {
     return 1;
   }
+  
   free((*node));
   *node = NULL;
 

@@ -7,11 +7,22 @@ static int shoppingListCreate(ShoppingList *slist, Shopping shop) {
   return 0;
 }
 
-static int shoppingListFree(ShoppingList *slist) {
-  if(*slist == NULL) {
-    return 1;
+int shoppingListFree(ShoppingList *slist) {
+  // if(*slist == NULL) {
+  //  return 1;
+  // }
+
+  ShoppingList iterator = *slist;
+  Shopping *prev; 
+
+  while (iterator != NULL) {
+    prev = iterator;
+    iterator = iterator->next; 
+    free(prev);  
   }
-  free(*slist);
+  
+  // free(*slist);
+
   *slist = NULL;
   return 0;
 }

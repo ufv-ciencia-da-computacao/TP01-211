@@ -14,5 +14,5 @@ struct shoppingList_t {
 int shoppingListInit(ShoppingList *slist);
 int shoppingListInsert(ShoppingList *slist, Shopping shop);
 int shoppingListToString(ShoppingList *slist, char str[]);
-
+int shoppingListFree(ShoppingList *slist);
 #endif
