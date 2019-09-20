@@ -1,4 +1,4 @@
-#include "../include/shoppingList.h"
+#include "./include/shoppingList.h"
 
 static int shoppingListCreate(ShoppingList *slist, Shopping shop) {
   (*slist) = (ShoppingList) malloc(sizeof(struct shoppingList_t));

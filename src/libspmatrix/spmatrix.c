@@ -1,4 +1,4 @@
-#include "../include/spmatrix.h"
+#include "./include/spmatrix.h"
 
 static void spMatrixConstructColumn(SpMatrix *spMatrix) {
   Node auxNode;
