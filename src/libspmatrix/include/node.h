@@ -35,6 +35,6 @@ int nodeInit(Node *node, int line, int col, Item value);
 int nodeFree(Node *node);
 int nodeValueConcat(Node *dest, Node orig);
 int nodeItemEquals(Node a, Node b);
-int spMatrixItemIsValid(Node a);
+int nodeIsValid(Node a);
 
 #endif

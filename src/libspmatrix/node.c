@@ -77,7 +77,7 @@ int nodeItemEquals(Node a, Node b) {
   return (a->value == b->value) ? 1 : 0;
 }
 
-int spMatrixItemIsValid(Node a) {
+int nodeIsValid(Node a) {
   return (a->line > 0 && a->col > 0) ? 1 : 0;
 }
 
