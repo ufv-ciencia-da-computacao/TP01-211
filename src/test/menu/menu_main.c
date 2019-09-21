@@ -5,11 +5,11 @@ int main(int argc, char *argv[]) {
   SpMatrix spMatrix;
 
   int err;
-
-  for (int i = 1; i < argc; i++) {
+  int i;
+  for (i = 1; i < argc; i++) {
     err = initMatrixFromFile(&spMatrix, argv[i]);
     if (!err) {
-      spMatrixToString(&spMatrix);
+      //spMatrixToString(&spMatrix);
       spMatrixFree(&spMatrix); 
     }
   }
