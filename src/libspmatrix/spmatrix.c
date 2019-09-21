@@ -3,48 +3,49 @@
 static void spMatrixConstructColumn(SpMatrix *spMatrix) {
   Node auxNode;
   Node iterator = spMatrix->head;
-
-  for (int i = 2; i <= spMatrix->lin+1; i++) {
+  int i;
+  for (i = 2; i <= spMatrix->lin+1; i++) {
     nodeInit(&auxNode, (-1) * i, -1, 0);
-    iterator->next_below = auxNode;
-    iterator = iterator->next_below;
+    nodeSetNextBelow(&iterator, auxNode);
+    iterator = nodeGetNextBelow(iterator);
   }
-  iterator->next_below = spMatrix->head;
+  nodeSetNextBelow(&iterator, spMatrix->head);
 }
 
 static void spMatrixConstructLine(SpMatrix *spMatrix) {
   Node auxNode;
   Node iterator = spMatrix->head;
-  for (int i = 2; i <= spMatrix->col+1; i++) {
+  int i;
+  for (i = 2; i <= spMatrix->col+1; i++) {
     nodeInit(&auxNode, -1, (-1) * i, 0);
-    iterator->next_right = auxNode;
-    iterator = iterator->next_right;
+    nodeSetNextRight(&iterator, auxNode);
+    iterator = nodeGetNextRight(iterator);
   }  
-  iterator->next_right = spMatrix->head;
+  nodeSetNextRight(&iterator, spMatrix->head);
 }
 
 static void spMatrixDiscoverFirstCol(SpMatrix *spMatrix, Node *firstCol, int col) {
   Node iterator = spMatrix->head;
   
   do {
-    if (abs(iterator->col)-1 == col) {
+    if (abs(nodeGetColumn(iterator))-1 == col) {
       (*firstCol) = iterator;
       break;
     }
-    iterator = iterator->next_right; 
-  } while (iterator->col != -1);
+    iterator = nodeGetNextRight(iterator); 
+  } while (nodeGetColumn(iterator) != -1);
 }
 
 static void spMatrixDiscoverFirstLine(SpMatrix *spMatrix, Node *firstLine, int line) {
   Node iterator = spMatrix->head;
 
   do {
-    if (abs(iterator->line)-1 == line) {
+    if (abs(nodeGetLine(iterator))-1 == line) {
       (*firstLine) = iterator;
       break;
     }
-    iterator = iterator->next_below; 
-  } while(iterator->line != -1);
+    iterator = nodeGetNextBelow(iterator); 
+  } while(nodeGetLine(iterator) != -1);
 }
 
 static void spMatrixInsertCol(SpMatrix *spMatrix, Node *createdNode, int col) {
@@ -57,24 +58,24 @@ static void spMatrixInsertCol(SpMatrix *spMatrix, Node *createdNode, int col) {
   iterator = auxFirstCol;
 
   while(true) {
-    next = iterator->next_below;
+    next = nodeGetNextBelow(iterator);
 
-    if(iterator->line > (*createdNode)->line) {
-      prev->next_below = (*createdNode);
-      (*createdNode)->next_below = iterator;
+    if(nodeGetLine(iterator) > nodeGetLine(*createdNode)) {
+      nodeSetNextBelow(&prev, *createdNode);
+      nodeSetNextBelow(createdNode, iterator);
       break;
     }
     
-    if(iterator->line == (*createdNode)->line) {
-      iterator->value = (*createdNode)->value;
+    if(nodeGetLine(iterator) == nodeGetLine(*createdNode)) {
+      nodeValueConcat(&iterator, *createdNode);
       nodeFree(createdNode);
       (*createdNode) = iterator;
       break;
     }
 
-    if(next->line == auxFirstCol->line) {
-      iterator->next_below = (*createdNode);
-      (*createdNode)->next_below = next;
+    if(nodeGetLine(next) == nodeGetLine(auxFirstCol)) {
+      nodeSetNextBelow(&iterator, *createdNode);
+      nodeSetNextBelow(createdNode, next);
       break;
     }
 
@@ -93,24 +94,24 @@ static void spMatrixInsertLine(SpMatrix *spMatrix, Node *createdNode, int line) 
   iterator = auxFirstLine;
 
   while (true) {
-    next = iterator->next_right;
+    next = nodeGetNextRight(iterator);
 
-    if(iterator->col > (*createdNode)->col) {
-      prev->next_right = (*createdNode);
-      (*createdNode)->next_right = iterator;
+    if(nodeGetColumn(iterator) > nodeGetColumn(*createdNode)) {
+      nodeSetNextRight(&prev, *createdNode);
+      nodeSetNextRight(createdNode, iterator);
       break;
     }
 
-    if(iterator->col == (*createdNode)->col) {
+    if(nodeGetColumn(iterator) == nodeGetColumn(*createdNode)) {
       /*
         Process already done on spMatrixInsertCol, cannot free node twice.
       */
       break;
     }
 
-    if (next->col == auxFirstLine->col) {
-      iterator->next_right = (*createdNode);
-      (*createdNode)->next_right = next;
+    if (nodeGetColumn(next) == nodeGetColumn(auxFirstLine)) {
+      nodeSetNextRight(&iterator, *createdNode);
+      nodeSetNextRight(createdNode, next);
       break;
     }
 
@@ -120,6 +121,9 @@ static void spMatrixInsertLine(SpMatrix *spMatrix, Node *createdNode, int line) 
 }
 
 int spMatrixInit(SpMatrix *spMatrix, int lin, int col) {
+  if(lin <= 0 || col <= 0) {
+    return 1;
+  }
   nodeInit(&spMatrix->head, -1, -1, 0);
   spMatrix->lin = lin;
   spMatrix->col = col;
@@ -139,48 +143,47 @@ int spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value) {
   return 0;
 }
 
-void spMatrixToString(SpMatrix *spMatrix/*, char str[]*/) {
+/*void spMatrixToString(SpMatrix *spMatrix, char str[]) {
   Node iterator = spMatrix->head;
   // str[0] = '\0';
   // char strTemp[32];
   int i, j;
   for(i=1; i <= spMatrix->lin; i++) {
-    iterator = iterator->next_below;
-    iterator = iterator->next_right;
+    iterator = nodeGetNextBelow(iterator);
+    iterator = nodeGetNextRight(iterator);
     for(j=1; j <= spMatrix->col; j++) {
-      if(iterator->col == j && iterator->line == i) {
+      if(nodeGetColumn(iterator) == j && nodeGetLine(iterator) == i) {
           // sprintf(strTemp, "%.2lf\t", iterator->value);
           // strcat(str, strTemp);          
-          printf("%.2lf\t", iterator->value);
-          iterator = iterator->next_right;
+          //printf("%.2lf\t", iterator->value);
+          iterator = nodeGetNextRight(iterator);
       } else {
         // strcat(str, "0.00\t");
-        printf("0.00\t");
+        //printf("0.00\t");
       }
     }
     //// strcat(str, "\n");
-    printf("\n");
+    //printf("\n");
   }  
-}
+}*/
 
 int spMatrixFree(SpMatrix *spMatrix) {
-  Node prev;
-  Node elem; 
+  Node prev; 
   Node firstCol, firstLine;
   Node iterator;
-  
-  for (int i = spMatrix->col; i > 0; i--) {
+  int i;
+  for (i = spMatrix->col; i > 0; i--) {
     spMatrixDiscoverFirstCol(spMatrix, &firstCol, i); 
-    iterator = firstCol->next_below;
+    iterator = nodeGetNextBelow(firstCol);
     while (iterator != firstCol) {
       prev = iterator;
-      iterator = iterator->next_below;
+      iterator = nodeGetNextBelow(iterator);
       nodeFree(&prev);
     } 
     nodeFree(&firstCol);
   }
 
-  for (int i = spMatrix->lin; i > 0; i--) {
+  for (i = spMatrix->lin; i > 0; i--) {
     spMatrixDiscoverFirstLine(spMatrix, &firstLine, i);
     nodeFree(&firstLine);
   }
@@ -190,9 +193,9 @@ int spMatrixFree(SpMatrix *spMatrix) {
 }
 
 int spMatrixLinOutOfBounds(SpMatrix *spMatrix, int line) {
-  return 1 ? spMatrix->lin < line : 0;
+  return (spMatrix->lin < line) ? 1 : 0;
 }
 
 int spMatrixColOutOfBounds(SpMatrix *spMatrix, int col) {
-    return 1 ? spMatrix->col < col : 0;
+    return (spMatrix->col < col) ? 1 : 0;
 }

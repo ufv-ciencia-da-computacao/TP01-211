@@ -8,20 +8,14 @@ static int shoppingListCreate(ShoppingList *slist, Shopping shop) {
 }
 
 int shoppingListFree(ShoppingList *slist) {
-  // if(*slist == NULL) {
-  //  return 1;
-  // }
-
   ShoppingList iterator = *slist;
-  Shopping *prev; 
+  ShoppingList prev; 
 
   while (iterator != NULL) {
     prev = iterator;
     iterator = iterator->next; 
     free(prev);  
   }
-  
-  // free(*slist);
 
   *slist = NULL;
   return 0;
@@ -70,7 +64,10 @@ int shoppingListInsert(ShoppingList *slist, Shopping shop) {
       }
 
       if(dateToDayOfYear(shoppingGetDate(new->shop)) == dateToDayOfYear(shoppingGetDate(iterator->shop))) {
-        (iterator->shop).qttProducts += (new->shop).qttProducts;
+        shoppingSetQttProducts( &(iterator->shop), 
+                                shoppingGetQttProducts(iterator->shop) + 
+                                shoppingGetQttProducts(new->shop)
+                              );
         shoppingListFree(&new);
         break;
       }
@@ -94,6 +91,17 @@ int shoppingListInsert(ShoppingList *slist, Shopping shop) {
 
     prev = iterator;
     iterator = next;
+  }
+
+  return 0;
+}
+
+int shoppingListConcat(ShoppingList *dest, ShoppingList orig) {
+  ShoppingList iterator = orig;
+
+  while (iterator != NULL) {
+    shoppingListInsert(dest, orig->shop);
+    iterator = iterator->next;
   }
 
   return 0;

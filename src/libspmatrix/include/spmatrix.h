@@ -12,7 +12,7 @@ typedef struct spmatrix_t {
 
 int spMatrixInit(SpMatrix *spMatrix, int lin, int col);
 int spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value);
-void spMatrixToString(SpMatrix *spMatrix /*, char str[]*/);
+/*void spMatrixToString(SpMatrix *spMatrix, char str[]);*/
 int spMatrixFree(SpMatrix *spMatrix);
 
 int spMatrixLinOutOfBounds(SpMatrix *spMatrix, int line);
