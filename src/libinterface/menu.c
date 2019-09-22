@@ -66,3 +66,19 @@ int initMatrixFromFile(SpMatrix *spMatrix, char *filename) {
 
   return 0;
 }
+
+int setOutput(char* filename, char* str) {
+  FILE *file;
+
+  file = fopen(filename, "w+");
+
+  if (file == NULL) {
+    return 1;
+  }
+
+  fprintf(file, "%s", str);
+
+  fclose(file);
+  
+  return 0;
+}

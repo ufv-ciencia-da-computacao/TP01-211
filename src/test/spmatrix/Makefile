@@ -22,4 +22,4 @@ spmatrix_main.o: spmatrix_main.c
 	gcc -c spmatrix_main.c -o spmatrix_main.o
 
 clear:
-	del *.o
+	rm *.o

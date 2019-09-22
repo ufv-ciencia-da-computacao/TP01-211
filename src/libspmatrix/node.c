@@ -58,9 +58,12 @@ int nodeInit(Node *node, int line, int col, Item value) {
 int nodeFree(Node *node) {
   if((*node) == NULL) {
     return 1;
-  }
+  } 
   
-  shoppingListFree(&((*node)->value));
+  if ((*node)->value != NULL) {
+    shoppingListFree(&((*node)->value));
+    (*node)->value = NULL;
+  }  
 
   free((*node));
   *node = NULL;
