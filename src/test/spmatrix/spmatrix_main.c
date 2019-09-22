@@ -3,19 +3,45 @@
 int main() {
   SpMatrix matrix;
   int err;
-  err = spMatrixInit(&matrix, 4, 4);
+  char *spMatrixString;
 
-  ShoppingList slist;
+  ShoppingList slist, slist1;
+  Shopping shop;
+  Date date;
+
   shoppingListInit(&slist);
- 
-  spMatrixInsert(&matrix, 1, 1, slist);
-  spMatrixInsert(&matrix, 2, 1, slist);
-  spMatrixInsert(&matrix, 2, 3, slist);
-  spMatrixInsert(&matrix, 4, 1, slist);
-  spMatrixInsert(&matrix, 4, 3, slist);
-  spMatrixInsert(&matrix, 4, 4, slist);
+  shoppingListInit(&slist1);
 
-  // spMatrixToString(&matrix);
+  dateInit(&date, 10, 11, 2012);
+  shoppingInit(&shop, date, 3);
+  shoppingListInsert(&slist, shop);
+
+  dateInit(&date, 12, 11, 2012);
+  shoppingInit(&shop, date, 3);
+  shoppingListInsert(&slist, shop);
+
+  dateInit(&date, 12, 11, 2014);
+  shoppingInit(&shop, date, 10);
+  shoppingListInsert(&slist1, shop);
+
+  err = spMatrixInit(&matrix, 4, 4);
+ 
+  err = spMatrixInsert(&matrix, 1, 2, slist);
+  err = spMatrixInsert(&matrix, 2, 2, slist1);
+
+  spMatrixToString(&matrix, &spMatrixString);
+  puts(spMatrixString);
+
+  free(spMatrixString);
+  
+  char *str1, *str2;
+  spMatrixQtdShoppingByProductToString(&matrix, &str1);
+  printf("%s", str1);
+  free(str1);
+  
+  // spMatrixQtdShoppingByClientToString(&matrix, &str2);
+  // printf("%s", str2);
+  // free(str2);
 
   err = spMatrixFree(&matrix);
 

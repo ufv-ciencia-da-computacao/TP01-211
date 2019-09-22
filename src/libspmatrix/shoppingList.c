@@ -130,7 +130,7 @@ int shoppingListSize(ShoppingList *slist) {
 
 int shoppingListToString(ShoppingList *slist, char *str) {
   ShoppingList iterator = *slist;
-  sprintf(str, "");
+  sprintf(str, "%s", "");
 
   char shopStr[SHOPPING_MAX_STR_LEN];
 

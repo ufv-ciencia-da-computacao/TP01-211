@@ -25,4 +25,4 @@ spmatrix.o: ../../libspmatrix/spmatrix.c
 	gcc -c ../../libspmatrix/spmatrix.c -o spmatrix.o
 
 clear:
-	del *.o
+	rm *.o

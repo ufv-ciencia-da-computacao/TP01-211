@@ -66,3 +66,43 @@ int initMatrixFromFile(SpMatrix *spMatrix, char *filename) {
 
   return 0;
 }
+
+int setOutput(char* filename, char* str) {
+  FILE *file;
+
+  file = fopen(filename, "w");
+
+  if (file == NULL) {
+    return 1;
+  }
+
+  fprintf(file, "%s", str);
+
+  fclose(file);
+  
+  return 0;
+}
+
+int showMatrix(SpMatrix *spMatrix) {
+  char *spMatrixString;
+  spMatrixToString(spMatrix, &spMatrixString);
+  puts(spMatrixString);
+  free(spMatrixString);
+  return 0;
+}
+
+int showShopByClient(SpMatrix *spMatrix) {
+  char *str;
+  spMatrixQtdShoppingByClientToString(spMatrix, &str);
+  puts(str);
+  free(str);
+  return 0;
+}
+
+int showShopByProduct(SpMatrix *spMatrix) {
+  char *str;
+  spMatrixQtdShoppingByProductToString(spMatrix, &str);
+  puts(str);
+  free(str);
+  return 0;
+}

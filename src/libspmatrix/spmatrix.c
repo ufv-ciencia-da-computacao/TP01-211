@@ -5,7 +5,7 @@ static void spMatrixConstructColumn(SpMatrix *spMatrix) {
   Node iterator = spMatrix->head;
   int i;
   for (i = 2; i <= spMatrix->lin+1; i++) {
-    nodeInit(&auxNode, (-1) * i, -1, 0);
+    nodeInit(&auxNode, (-1) * i, -1, NULL);
     nodeSetNextBelow(&iterator, auxNode);
     iterator = nodeGetNextBelow(iterator);
   }
@@ -17,7 +17,7 @@ static void spMatrixConstructLine(SpMatrix *spMatrix) {
   Node iterator = spMatrix->head;
   int i;
   for (i = 2; i <= spMatrix->col+1; i++) {
-    nodeInit(&auxNode, -1, (-1) * i, 0);
+    nodeInit(&auxNode, -1, (-1) * i, NULL);
     nodeSetNextRight(&iterator, auxNode);
     iterator = nodeGetNextRight(iterator);
   }  
@@ -95,7 +95,6 @@ static void spMatrixInsertLine(SpMatrix *spMatrix, Node *createdNode, int line) 
 
   while (true) {
     next = nodeGetNextRight(iterator);
-
     if(nodeGetColumn(iterator) > nodeGetColumn(*createdNode)) {
       nodeSetNextRight(&prev, *createdNode);
       nodeSetNextRight(createdNode, iterator);
@@ -118,6 +117,114 @@ static void spMatrixInsertLine(SpMatrix *spMatrix, Node *createdNode, int line) 
     prev = iterator;
     iterator = next;
   }
+}
+
+static int spMatrixSize(SpMatrix *spMatrix) {
+  Node iterator = spMatrix->head->next_below->next_right;
+
+  int spMatrixSize=0;
+
+  do {
+    if (nodeGetLine(iterator) < 0) {
+      iterator = nodeGetNextBelow(iterator);
+    }
+
+    Item slist = nodeGetItem(iterator);
+    spMatrixSize += shoppingListSize(&slist);
+
+    iterator = nodeGetNextRight(iterator);
+
+  } while (nodeGetNextBelow(iterator) != spMatrix->head);
+  
+  
+  return spMatrixSize;
+} 
+
+static int spMatrixQtdShoppingByProduct(SpMatrix *spMatrix, int **vector) {
+  Node iterator = spMatrix->head->next_right;
+  Node firstCol;
+
+  *vector = (int*) malloc(spMatrix->col * sizeof(int));
+
+  int i = 0;
+  (*vector)[i] = 0;
+  
+  do {
+    if (iterator->line < 0) {
+      firstCol = iterator;
+    }
+    
+    iterator = iterator->next_below;
+  
+    if (iterator == firstCol) {
+      iterator = iterator->next_right;
+      i++;
+      (*vector)[i] = 0;
+    } else {
+      Item sList = nodeGetItem(iterator);
+      (*vector)[i] += shoppingListCountProducts(&sList);
+    }
+    
+  } while (iterator != spMatrix->head);
+
+}
+
+static int spMatrixQtdShoppingByClient(SpMatrix *spMatrix, int **vector) {
+  Node iterator = spMatrix->head->next_below;
+  Node firstLine;
+
+  *vector = (int*) malloc(spMatrix->lin * sizeof(int));
+  int i = 0;
+  (*vector)[i] = 0;
+  do {
+    if (iterator->line < 0) {
+      firstLine = iterator;
+    }
+    
+    iterator = iterator->next_right;
+  
+    if (iterator == firstLine) {
+      iterator = iterator->next_below;
+      i++;
+      (*vector)[i] = 0;
+    } else {
+      Item sList = nodeGetItem(iterator);
+      (*vector)[i] += shoppingListSize(&sList);
+    }
+    
+  } while (iterator != spMatrix->head);
+}
+
+int spMatrixQtdShoppingByClientToString(SpMatrix *spMatrix, char **strArg) {
+  int *vector;
+  int i;
+  spMatrixQtdShoppingByClient(spMatrix, &vector);  
+
+  *strArg = (char*) malloc (spMatrix->lin * DESCRIPTION_SIZE * sizeof(char));
+  (*strArg)[0] = '\0';
+  char strTemp[DESCRIPTION_SIZE];
+  for (i = 0; i < spMatrix->lin; i++) {
+    sprintf(strTemp, "Cliente %d comprou %d vezes\n", i+1, vector[i]);
+    strcat(*strArg, strTemp);
+  }
+
+  free(vector);
+}
+
+int spMatrixQtdShoppingByProductToString(SpMatrix *spMatrix, char **str) {
+  int *vector;
+  int i;
+  spMatrixQtdShoppingByProduct(spMatrix, &vector);
+
+  *str = (char*) malloc (spMatrix->col * DESCRIPTION_SIZE * sizeof(char));
+  (*str)[0] = '\0';
+  char strTemp[DESCRIPTION_SIZE];
+
+  for (i = 0; i < spMatrix->col; i++) {
+    sprintf(strTemp, "Produto %d foi comprado %d vezes\n", i+1, vector[i]);
+    strcat(*str, strTemp);
+  }
+  free(vector);
 }
 
 int spMatrixInit(SpMatrix *spMatrix, int lin, int col) {
@@ -143,29 +250,56 @@ int spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value) {
   return 0;
 }
 
-/*void spMatrixToString(SpMatrix *spMatrix, char str[]) {
+void spMatrixToString(SpMatrix *spMatrix, char** spMatrixStr) {
   Node iterator = spMatrix->head;
-  // str[0] = '\0';
-  // char strTemp[32];
-  int i, j;
+
+  *spMatrixStr = (char *) malloc ((spMatrixSize(spMatrix) * sizeof(Shopping)) + (DESCRIPTION_SIZE * sizeof(char)));
+  (*spMatrixStr)[0] = '\0';
+
+  int i, j, bought = 0;
   for(i=1; i <= spMatrix->lin; i++) {
     iterator = nodeGetNextBelow(iterator);
     iterator = nodeGetNextRight(iterator);
+
+    if (nodeGetNextRight(iterator) != iterator) {
+      char descriptionCliente[DESCRIPTION_SIZE];
+      sprintf(descriptionCliente, "Cliente: %d\n", nodeGetLine(iterator));
+      strcat(*spMatrixStr, descriptionCliente);
+      bought = 1;
+    } /*else {
+      char descriptionCliente[DESCRIPTION_SIZE];
+      sprintf(descriptionCliente, "Cliente: %d\n", abs(nodeGetLine(iterator))-1);
+      strcat(*spMatrixStr, descriptionCliente);
+      strcat(*spMatrixStr, "Nao ha registro de Compras\n\n");
+    }*/
+
     for(j=1; j <= spMatrix->col; j++) {
       if(nodeGetColumn(iterator) == j && nodeGetLine(iterator) == i) {
-          // sprintf(strTemp, "%.2lf\t", iterator->value);
-          // strcat(str, strTemp);          
-          //printf("%.2lf\t", iterator->value);
-          iterator = nodeGetNextRight(iterator);
-      } else {
-        // strcat(str, "0.00\t");
-        //printf("0.00\t");
+        Item slist = nodeGetItem(iterator);
+        char *strTempListDescription = (char *) malloc ((shoppingListSize(&slist) * sizeof(Shopping)) + (DESCRIPTION_SIZE * sizeof(char)));
+        strTempListDescription[0] = '\0';
+        char *strTempList = (char *) malloc(shoppingListSize(&slist) * sizeof(Shopping));
+        strTempList[0] = '\0';
+        shoppingListToString(&slist, strTempList);
+
+        char description[DESCRIPTION_SIZE] = "";
+        sprintf(description, "Compra(s) do Produto: %d\n", nodeGetColumn(iterator));
+        strcat(strTempListDescription, description);
+        strcat(strTempListDescription, strTempList);
+        strcat(strTempListDescription, "\n");
+
+        strcat(*spMatrixStr, strTempListDescription);
+
+        free(strTempList);
+        free(strTempListDescription);      
+        iterator = nodeGetNextRight(iterator);
       }
     }
-    //// strcat(str, "\n");
-    //printf("\n");
-  }  
-}*/
+
+    if(bought) strcat(*spMatrixStr, "\n");
+    bought = 0;
+  }
+}
 
 int spMatrixFree(SpMatrix *spMatrix) {
   if(spMatrix == NULL) {
@@ -181,6 +315,7 @@ int spMatrixFree(SpMatrix *spMatrix) {
     while (iterator != firstCol) {
       prev = iterator;
       iterator = nodeGetNextBelow(iterator);
+
       nodeFree(&prev);
     } 
     nodeFree(&firstCol);
