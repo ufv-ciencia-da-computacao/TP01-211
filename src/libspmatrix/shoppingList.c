@@ -118,6 +118,16 @@ int shoppingListCountProducts(ShoppingList slist) {
   return qtt;
 }
 
+int shoppingListSize(ShoppingList slist) {
+  int total = 0;
+  ShoppingList iterator = slist;
+  while (iterator != NULL) { 
+    total++;
+    iterator = iterator->next;
+  }
+  return total;
+}
+
 int shoppingListToString(ShoppingList *slist, char *str) {
   ShoppingList iterator = *slist;
   sprintf(str, "");

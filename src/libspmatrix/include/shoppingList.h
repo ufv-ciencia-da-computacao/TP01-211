@@ -15,6 +15,7 @@ int shoppingListInit(ShoppingList *slist);
 int shoppingListInsert(ShoppingList *slist, Shopping shop);
 int shoppingListConcat(ShoppingList *dest, ShoppingList orig);
 int shoppingListCountProducts(ShoppingList slist);
+int shoppingListSize(ShoppingList slist);
 int shoppingListToString(ShoppingList *slist, char *str);
 int shoppingListFree(ShoppingList *slist);
 #endif
