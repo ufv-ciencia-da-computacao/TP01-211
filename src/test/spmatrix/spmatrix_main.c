@@ -8,12 +8,12 @@ int main() {
   ShoppingList slist;
   shoppingListInit(&slist);
  
-  err = spMatrixInsert(&matrix, 1, 1, slist);
-  err = spMatrixInsert(&matrix, 2, 1, slist);
-  err = spMatrixInsert(&matrix, 2, 3, slist);
-  err = spMatrixInsert(&matrix, 4, 1, slist);
-  err = spMatrixInsert(&matrix, 4, 3, slist);
-  err = spMatrixInsert(&matrix, 4, 4, slist);
+  spMatrixInsert(&matrix, 1, 1, slist);
+  spMatrixInsert(&matrix, 2, 1, slist);
+  spMatrixInsert(&matrix, 2, 3, slist);
+  spMatrixInsert(&matrix, 4, 1, slist);
+  spMatrixInsert(&matrix, 4, 3, slist);
+  spMatrixInsert(&matrix, 4, 4, slist);
 
   // spMatrixToString(&matrix);
 

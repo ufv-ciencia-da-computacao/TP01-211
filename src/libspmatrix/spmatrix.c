@@ -168,6 +168,9 @@ int spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value) {
 }*/
 
 int spMatrixFree(SpMatrix *spMatrix) {
+  if(spMatrix == NULL) {
+    return 1;
+  }
   Node prev; 
   Node firstCol, firstLine;
   Node iterator;
