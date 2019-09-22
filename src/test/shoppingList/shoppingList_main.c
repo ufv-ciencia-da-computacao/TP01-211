@@ -1,30 +1,43 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include "../../include/shoppingList.h"
-#include "../../include/date.h"
+#include "../../libspmatrix/include/shoppingList.h"
 
 int main() {
-
   ShoppingList slist;
   shoppingListInit(&slist);
+
+  ShoppingList slist1;
+  shoppingListInit(&slist1);
   
   Shopping shop;
   Date date;
-  int day, month, year, qttProducts;
   char str[512];
 
-  while(true) {
-    printf("dia mes ano qttProducts\n");
-    scanf("%d %d %d %d", &day, &month, &year, &qttProducts);
-    dateInit(&date, day, month, year);
+  dateInit(&date, 10, 11, 2012);
+  shoppingInit(&shop, date, 3);
+  shoppingListInsert(&slist, shop);
 
-    shoppingInit(&shop, date, qttProducts);
-    shoppingListInsert(&slist, shop);
-    shoppingListToString(&slist, str);
+  dateInit(&date, 10, 10, 2011);
+  shoppingInit(&shop, date, 4);
+  shoppingListInsert(&slist1, shop);
+  dateInit(&date, 10, 12, 2012);
+  shoppingInit(&shop, date, 5);
+  shoppingListInsert(&slist1, shop);
 
-    printf("\nLista completa: \n");
-    printf("%s\n", str);
-  }
+  printf("slist: \n");
+  shoppingListToString(&slist, str);
+  printf("%s\n\n", str);
+
+  printf("slist1: \n");
+  shoppingListToString(&slist1, str);
+  printf("%s\n\n", str);
+
+  shoppingListConcat(&slist, slist1);
+  shoppingListFree(&slist1);
+
+  shoppingListToString(&slist, str);
+  printf("items after concat: %d\n\n%s\n\n", shoppingListCountProducts(&slist), str);
+  shoppingListFree(&slist);
 
   return 0;
 

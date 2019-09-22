@@ -7,6 +7,8 @@
 
 #include "date.h"
 
+#define SHOPPING_MAX_STR_LEN (DATE_MAX_STR_LEN + 8)
+
 typedef struct shopping_t {
   Date date;
   int qttProducts;
@@ -23,7 +25,6 @@ int shoppingSetQttProducts(Shopping *shop, int qttProducts);
 #pragma endregion RegionSetters
 
 int shoppingInit(Shopping *shop, Date date, int qttProducts);
-int shoppingToString(Shopping *shop, char str[]);
+int shoppingToString(Shopping *shop, char *str);
 int shoppingVerify(Shopping shop);
-
 #endif

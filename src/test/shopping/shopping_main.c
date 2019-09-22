@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../../include/shopping.h"
+#include "../../libspmatrix/include/shopping.h"
 
 int main() {
   Shopping shop;

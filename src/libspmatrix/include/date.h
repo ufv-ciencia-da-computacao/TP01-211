@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#define DATE_MAX_STR_LEN 16
+
 typedef struct date_t {
   int day;
   int month;
@@ -25,6 +27,6 @@ int dateInit(Date *date, int day, int month, int year);
 int dateToDayOfYear(Date date);
 int dateFromDayOfYear(Date *date, int dayOfYear);
 int dateVerify(Date date);
-int dateToString(Date *date, char str[]);
+int dateToString(Date *date, char *str);
 
 #endif

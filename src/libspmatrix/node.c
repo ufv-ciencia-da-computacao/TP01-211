@@ -1,16 +1,24 @@
 #include "./include/node.h"
 
 #pragma region RegionGetters
-int nodeGetLine(Node *node) {
-  return (*node)->line;
+int nodeGetLine(Node node) {
+  return node->line;
 }
 
-int nodeGetColumn(Node *node) {
-  return (*node)->col;
+int nodeGetColumn(Node node) {
+  return node->col;
 }
 
-Item nodeGetItem(Node *node) {
-  return (*node)->value;
+Item nodeGetItem(Node node) {
+  return node->value;
+}
+
+Node nodeGetNextRight(Node node) {
+  return node->next_right;
+}
+
+Node nodeGetNextBelow(Node node) {
+  return node->next_below;
 }
 #pragma endregion RegionGetters
 
@@ -25,6 +33,14 @@ void nodeSetCol(Node *node, int col) {
 
 void nodeSetItem(Node *node, Item value) {
   (*node)->value = value;
+}
+
+void nodeSetNextRight(Node *node, Node nextRight){
+  (*node)->next_right = nextRight;
+}
+
+void nodeSetNextBelow(Node *node, Node nextBelow) {
+  (*node)->next_below = nextBelow;
 }
 #pragma endregion RegionSetters
 
@@ -42,18 +58,29 @@ int nodeInit(Node *node, int line, int col, Item value) {
 int nodeFree(Node *node) {
   if((*node) == NULL) {
     return 1;
-  }
+  } 
+  
+  if ((*node)->value != NULL) {
+    shoppingListFree(&((*node)->value));
+    (*node)->value = NULL;
+  }  
+
   free((*node));
   *node = NULL;
 
-  return 1;
+  return 0;
+}
+
+int nodeValueConcat(Node *dest, Node orig) {
+  shoppingListConcat(&((*dest)->value), orig->value);
+  return 0;
 }
 
 int nodeItemEquals(Node a, Node b) {
-  return 1 ? a->value == b->value : 0;
+  return (a->value == b->value) ? 1 : 0;
 }
 
-int spMatrixItemIsValid(Node a) {
-  return 1 ? (a->line > 0 && a->col > 0) : 0;
+int nodeIsValid(Node a) {
+  return (a->line > 0 && a->col > 0) ? 1 : 0;
 }
 

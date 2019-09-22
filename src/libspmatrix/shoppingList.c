@@ -7,11 +7,16 @@ static int shoppingListCreate(ShoppingList *slist, Shopping shop) {
   return 0;
 }
 
-static int shoppingListFree(ShoppingList *slist) {
-  if(*slist == NULL) {
-    return 1;
+int shoppingListFree(ShoppingList *slist) {
+  ShoppingList iterator = *slist;
+  ShoppingList prev; 
+
+  while (iterator != NULL) {
+    prev = iterator;
+    iterator = iterator->next; 
+    free(prev);  
   }
-  free(*slist);
+
   *slist = NULL;
   return 0;
 }
@@ -59,7 +64,10 @@ int shoppingListInsert(ShoppingList *slist, Shopping shop) {
       }
 
       if(dateToDayOfYear(shoppingGetDate(new->shop)) == dateToDayOfYear(shoppingGetDate(iterator->shop))) {
-        (iterator->shop).qttProducts += (new->shop).qttProducts;
+        shoppingSetQttProducts( &(iterator->shop), 
+                                shoppingGetQttProducts(iterator->shop) + 
+                                shoppingGetQttProducts(new->shop)
+                              );
         shoppingListFree(&new);
         break;
       }
@@ -88,12 +96,43 @@ int shoppingListInsert(ShoppingList *slist, Shopping shop) {
   return 0;
 }
 
-int shoppingListToString(ShoppingList *slist, char str[]) {
+int shoppingListConcat(ShoppingList *dest, ShoppingList orig) {
+  ShoppingList iterator = orig;
+
+  while (iterator != NULL) {
+    shoppingListInsert(dest, iterator->shop);
+    iterator = iterator->next;
+  }
+
+  return 0;
+}
+
+int shoppingListCountProducts(ShoppingList *slist) {
+  int qtt = 0;
   ShoppingList iterator = *slist;
+  while(iterator != NULL) {
+    qtt += shoppingGetQttProducts(iterator->shop);
+    iterator = iterator->next;
+  }
 
-  sprintf(str, "");
+  return qtt;
+}
 
-  char shopStr[128];
+int shoppingListSize(ShoppingList *slist) {
+  int total = 0;
+  ShoppingList iterator = *slist;
+  while (iterator != NULL) { 
+    total++;
+    iterator = iterator->next;
+  }
+  return total;
+}
+
+int shoppingListToString(ShoppingList *slist, char *str) {
+  ShoppingList iterator = *slist;
+  sprintf(str, "%s", "");
+
+  char shopStr[SHOPPING_MAX_STR_LEN];
 
   while(iterator != NULL) {
     shoppingToString(&(iterator->shop), shopStr);

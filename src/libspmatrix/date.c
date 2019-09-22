@@ -77,7 +77,7 @@ int dateVerify(Date date) {
   return 1;
 }
 
-int dateToString(Date *date, char str[]) {
+int dateToString(Date *date, char *str) {
   sprintf(str, "%.2d/%.2d/%.4d", date->day, date->month, date->year);
   return 0;
 }
