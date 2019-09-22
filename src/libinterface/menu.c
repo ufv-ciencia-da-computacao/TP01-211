@@ -5,7 +5,6 @@ int initMatrixFromFile(SpMatrix *spMatrix, char *filename) {
   file = fopen(filename, "r+");
 
   if (file == NULL) {
-    printf("s");
     return 1;
   }
 
@@ -29,6 +28,7 @@ int initMatrixFromFile(SpMatrix *spMatrix, char *filename) {
     if (countLines == 0) {
       fscanf(file, "%d, %d", &lineMAX, &colMAX);
       err = spMatrixInit(spMatrix, lineMAX, colMAX);
+      if(err) return 1;
       countLines = 1;
     } else {
       if(countItems == 0) {
@@ -39,16 +39,19 @@ int initMatrixFromFile(SpMatrix *spMatrix, char *filename) {
         do {
           fscanf(file, "%d/%d/%d %d%c", &day, &month, &year, &qttProducts, &detectEnd);
           dateInit(&date, day, month, year);
+          if(!dateVerify(date)) return 1;
           shoppingInit(&shop, date, qttProducts);
+          if(!shoppingVerify(shop)) return 1;
           shoppingListInsert(&slist, shop);
         } while(detectEnd != '\n' && detectEnd != EOF && detectEnd != 0);
         countItems = 0;
 
         if (!spMatrixColOutOfBounds(spMatrix, col) && !spMatrixLinOutOfBounds(spMatrix, line)) {
           err = spMatrixInsert(spMatrix, line, col, slist);
-        } else { 
-          // LOG file
-        }     
+          if(err) return 1;
+        } else {
+          return 1;
+        }  
       } 
     }
   }  

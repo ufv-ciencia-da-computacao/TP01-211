@@ -11,6 +11,8 @@ int main(int argc, char *argv[]) {
     if (!err) {
       //spMatrixToString(&spMatrix);
       spMatrixFree(&spMatrix); 
+    } else {
+      printf("\n\nAlgo deu errado, verifique o arquivo e tente novamente.\n\n");
     }
   }
   

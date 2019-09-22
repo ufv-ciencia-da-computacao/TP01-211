@@ -100,19 +100,29 @@ int shoppingListConcat(ShoppingList *dest, ShoppingList orig) {
   ShoppingList iterator = orig;
 
   while (iterator != NULL) {
-    shoppingListInsert(dest, orig->shop);
+    shoppingListInsert(dest, iterator->shop);
     iterator = iterator->next;
   }
 
   return 0;
 }
 
-int shoppingListToString(ShoppingList *slist, char str[]) {
-  ShoppingList iterator = *slist;
+int shoppingListCountProducts(ShoppingList slist) {
+  int qtt = 0;
+  ShoppingList iterator = slist;
+  while(iterator != NULL) {
+    qtt += shoppingGetQttProducts(iterator->shop);
+    iterator = iterator->next;
+  }
 
+  return qtt;
+}
+
+int shoppingListToString(ShoppingList *slist, char *str) {
+  ShoppingList iterator = *slist;
   sprintf(str, "");
 
-  char shopStr[128];
+  char shopStr[SHOPPING_MAX_STR_LEN];
 
   while(iterator != NULL) {
     shoppingToString(&(iterator->shop), shopStr);
