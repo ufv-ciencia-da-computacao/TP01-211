@@ -21,37 +21,43 @@ int initMatrixFromFile(SpMatrix *spMatrix, char *filename) {
   
   char detectEnd;
   int countLines = 0, countItems = 0;
-  int err = 0;
-
 
   while (!feof(file)) {
     if (countLines == 0) {
       fscanf(file, "%d, %d", &lineMAX, &colMAX);
-      err = spMatrixInit(spMatrix, lineMAX, colMAX);
-      if(err) return 1;
+      if(spMatrixInit(spMatrix, lineMAX, colMAX)) return 1;
       countLines = 1;
     } else {
       if(countItems == 0) {
         fscanf(file, "%d %d ", &line, &col);
+        if (spMatrixColOutOfBounds(spMatrix, col) || spMatrixLinOutOfBounds(spMatrix, line)) {
+          spMatrixFree(spMatrix);
+          return 1;
+        }
         shoppingListInit(&slist);
         countItems = 1;
       } else {
         do {
           fscanf(file, "%d/%d/%d %d%c", &day, &month, &year, &qttProducts, &detectEnd);
+          
           dateInit(&date, day, month, year);
-          if(!dateVerify(date)) return 1;
+          if(!dateVerify(date)) {
+            shoppingListFree(&slist);
+            spMatrixFree(spMatrix);
+            return 1;
+          }
+          
           shoppingInit(&shop, date, qttProducts);
-          if(!shoppingVerify(shop)) return 1;
+          if(!shoppingVerify(shop)) {
+            shoppingListFree(&slist);
+            spMatrixFree(spMatrix);
+            return 1;
+          }
+          
           shoppingListInsert(&slist, shop);
         } while(detectEnd != '\n' && detectEnd != EOF && detectEnd != 0);
         countItems = 0;
-
-        if (!spMatrixColOutOfBounds(spMatrix, col) && !spMatrixLinOutOfBounds(spMatrix, line)) {
-          err = spMatrixInsert(spMatrix, line, col, slist);
-          if(err) return 1;
-        } else {
-          return 1;
-        }  
+        spMatrixInsert(spMatrix, line, col, slist);
       } 
     }
   }  
