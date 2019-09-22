@@ -35,13 +35,19 @@ int main() {
   free(spMatrixString);
   
   char *str1, *str2;
-  spMatrixQtdShoppingByProductToString(&matrix, &str1);
-  printf("%s", str1);
-  free(str1);
+  spMatrixQtdShoppingByClientToString(&matrix, &str2);
+  puts(str2);
+  free(str2);
   
-  // spMatrixQtdShoppingByClientToString(&matrix, &str2);
-  // printf("%s", str2);
-  // free(str2);
+  printf("\n\n");
+  
+  
+  spMatrixQtdShoppingByProductToString(&matrix, &str1);
+  puts(str1);
+  free(str1);
+
+  
+  
 
   err = spMatrixFree(&matrix);
 

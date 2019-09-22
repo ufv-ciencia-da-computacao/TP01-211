@@ -144,7 +144,7 @@ static int spMatrixQtdShoppingByProduct(SpMatrix *spMatrix, int **vector) {
   Node iterator = spMatrix->head->next_right;
   Node firstCol;
 
-  *vector = (int*) malloc(spMatrix->col * sizeof(int));
+  *vector = (int*) malloc((spMatrix->col+1) * sizeof(int));
 
   int i = 0;
   (*vector)[i] = 0;
@@ -173,7 +173,7 @@ static int spMatrixQtdShoppingByClient(SpMatrix *spMatrix, int **vector) {
   Node iterator = spMatrix->head->next_below;
   Node firstLine;
 
-  *vector = (int*) malloc(spMatrix->lin * sizeof(int));
+  *vector = (int*) malloc((spMatrix->lin+1) * sizeof(int));
   int i = 0;
   (*vector)[i] = 0;
   do {
