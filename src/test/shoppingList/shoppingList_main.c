@@ -36,7 +36,7 @@ int main() {
   shoppingListFree(&slist1);
 
   shoppingListToString(&slist, str);
-  printf("items after concat: %d\n\n%s\n\n", shoppingListCountProducts(slist), str);
+  printf("items after concat: %d\n\n%s\n\n", shoppingListCountProducts(&slist), str);
   shoppingListFree(&slist);
 
   return 0;

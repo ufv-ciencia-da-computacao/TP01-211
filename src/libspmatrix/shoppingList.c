@@ -107,9 +107,9 @@ int shoppingListConcat(ShoppingList *dest, ShoppingList orig) {
   return 0;
 }
 
-int shoppingListCountProducts(ShoppingList slist) {
+int shoppingListCountProducts(ShoppingList *slist) {
   int qtt = 0;
-  ShoppingList iterator = slist;
+  ShoppingList iterator = *slist;
   while(iterator != NULL) {
     qtt += shoppingGetQttProducts(iterator->shop);
     iterator = iterator->next;
@@ -118,9 +118,9 @@ int shoppingListCountProducts(ShoppingList slist) {
   return qtt;
 }
 
-int shoppingListSize(ShoppingList slist) {
+int shoppingListSize(ShoppingList *slist) {
   int total = 0;
-  ShoppingList iterator = slist;
+  ShoppingList iterator = *slist;
   while (iterator != NULL) { 
     total++;
     iterator = iterator->next;
