@@ -253,7 +253,7 @@ int spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value) {
 void spMatrixToString(SpMatrix *spMatrix, char** spMatrixStr) {
   Node iterator = spMatrix->head;
 
-  *spMatrixStr = (char *) malloc ((spMatrixSize(spMatrix) * sizeof(Shopping)) + (DESCRIPTION_SIZE * sizeof(char)));
+  *spMatrixStr = (char *) malloc ((spMatrixSize(spMatrix) * SHOPPING_MAX_STR_LEN) + (DESCRIPTION_SIZE * sizeof(char)));
   (*spMatrixStr)[0] = '\0';
 
   int i, j, bought = 0;
