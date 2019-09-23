@@ -120,7 +120,9 @@ static void spMatrixInsertLine(SpMatrix *spMatrix, Node *createdNode, int line) 
 }
 
 static int spMatrixSize(SpMatrix *spMatrix) {
-  Node iterator = spMatrix->head->next_below->next_right;
+  Node iterator = spMatrix->head;
+  iterator = nodeGetNextBelow(iterator);
+  iterator = nodeGetNextRight(iterator);
 
   int spMatrixSize=0;
 
@@ -141,7 +143,8 @@ static int spMatrixSize(SpMatrix *spMatrix) {
 } 
 
 static int spMatrixQtdShoppingByProduct(SpMatrix *spMatrix, int **vector) {
-  Node iterator = spMatrix->head->next_right;
+  Node iterator = spMatrix->head;
+  iterator = nodeGetNextRight(iterator);
   Node firstCol;
 
   *vector = (int*) malloc((spMatrix->col+1) * sizeof(int));
@@ -154,10 +157,10 @@ static int spMatrixQtdShoppingByProduct(SpMatrix *spMatrix, int **vector) {
       firstCol = iterator;
     }
     
-    iterator = iterator->next_below;
+    iterator = nodeGetNextBelow(iterator);
   
     if (iterator == firstCol) {
-      iterator = iterator->next_right;
+      iterator = nodeGetNextRight(iterator);
       i++;
       (*vector)[i] = 0;
     } else {
@@ -170,21 +173,22 @@ static int spMatrixQtdShoppingByProduct(SpMatrix *spMatrix, int **vector) {
 }
 
 static int spMatrixQtdShoppingByClient(SpMatrix *spMatrix, int **vector) {
-  Node iterator = spMatrix->head->next_below;
+  Node iterator = spMatrix->head;
+  iterator = nodeGetNextBelow(iterator);
   Node firstLine;
 
   *vector = (int*) malloc((spMatrix->lin+1) * sizeof(int));
   int i = 0;
   (*vector)[i] = 0;
   do {
-    if (iterator->line < 0) {
+    if (nodeGetLine(iterator) < 0) {
       firstLine = iterator;
     }
     
-    iterator = iterator->next_right;
+    iterator = nodeGetNextRight(iterator);
   
     if (iterator == firstLine) {
-      iterator = iterator->next_below;
+      iterator = nodeGetNextBelow(iterator);
       i++;
       (*vector)[i] = 0;
     } else {
