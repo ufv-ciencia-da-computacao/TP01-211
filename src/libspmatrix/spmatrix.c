@@ -335,9 +335,9 @@ int spMatrixFree(SpMatrix *spMatrix) {
 }
 
 int spMatrixLinOutOfBounds(SpMatrix *spMatrix, int line) {
-  return (spMatrix->lin < line) ? 1 : 0;
+  return (spMatrix->lin < line || line <= 0) ? 1 : 0;
 }
 
 int spMatrixColOutOfBounds(SpMatrix *spMatrix, int col) {
-    return (spMatrix->col < col) ? 1 : 0;
+    return (spMatrix->col < col || col <= 0) ? 1 : 0;
 }
