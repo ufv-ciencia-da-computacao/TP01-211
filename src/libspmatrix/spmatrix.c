@@ -256,8 +256,12 @@ int spMatrixInsert(SpMatrix *spMatrix, int line, int col, Item value) {
 
 void spMatrixToString(SpMatrix *spMatrix, char** spMatrixStr) {
   Node iterator = spMatrix->head;
+  char descriptionCliente[DESCRIPTION_SIZE];
+  char *strTempListDescription;
+  char *strTempList;
+  char description[DESCRIPTION_SIZE];
 
-  *spMatrixStr = (char *) malloc ((spMatrixSize(spMatrix) * SHOPPING_MAX_STR_LEN) + (DESCRIPTION_SIZE * sizeof(char)));
+  *spMatrixStr = (char *) malloc (spMatrixSize(spMatrix) * (SHOPPING_MAX_STR_LEN + DESCRIPTION_SIZE) * sizeof(char));
   (*spMatrixStr)[0] = '\0';
 
   int i, j, bought = 0;
@@ -266,7 +270,6 @@ void spMatrixToString(SpMatrix *spMatrix, char** spMatrixStr) {
     iterator = nodeGetNextRight(iterator);
 
     if (nodeGetNextRight(iterator) != iterator) {
-      char descriptionCliente[DESCRIPTION_SIZE];
       sprintf(descriptionCliente, "Cliente: %d\n", nodeGetLine(iterator));
       strcat(*spMatrixStr, descriptionCliente);
       bought = 1;
@@ -280,13 +283,12 @@ void spMatrixToString(SpMatrix *spMatrix, char** spMatrixStr) {
     for(j=1; j <= spMatrix->col; j++) {
       if(nodeGetColumn(iterator) == j && nodeGetLine(iterator) == i) {
         Item slist = nodeGetItem(iterator);
-        char *strTempListDescription = (char *) malloc ((shoppingListSize(&slist) * sizeof(Shopping)) + (DESCRIPTION_SIZE * sizeof(char)));
+        strTempListDescription = (char *) malloc ((shoppingListSize(&slist) * SHOPPING_MAX_STR_LEN * sizeof(char)) + (DESCRIPTION_SIZE * sizeof(char)));
         strTempListDescription[0] = '\0';
-        char *strTempList = (char *) malloc(shoppingListSize(&slist) * sizeof(Shopping));
+        strTempList = (char *) malloc(shoppingListSize(&slist) * SHOPPING_MAX_STR_LEN * sizeof(char));
         strTempList[0] = '\0';
         shoppingListToString(&slist, strTempList);
 
-        char description[DESCRIPTION_SIZE] = "";
         sprintf(description, "Compra(s) do Produto: %d\n", nodeGetColumn(iterator));
         strcat(strTempListDescription, description);
         strcat(strTempListDescription, strTempList);
