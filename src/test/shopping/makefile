@@ -13,4 +13,5 @@ shopping_main.o: shopping_main.c
 	gcc -c shopping_main.c -o shopping_main.o
 
 clear:
-	del *.o
+	rm *.o
+#	del *.o

@@ -26,3 +26,4 @@ spmatrix.o: ../../libspmatrix/spmatrix.c
 
 clear:
 	rm *.o
+# del *.o

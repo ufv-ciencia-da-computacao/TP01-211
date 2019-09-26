@@ -10,4 +10,5 @@ date_main.o: date_main.c
 	gcc -c date_main.c -o date_main.o
 
 clear:
-	del *.o
+	rm *.o
+# del *.o
