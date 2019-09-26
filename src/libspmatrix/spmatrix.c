@@ -280,7 +280,7 @@ void spMatrixToString(SpMatrix *spMatrix, char** spMatrixStr) {
     for(j=1; j <= spMatrix->col; j++) {
       if(nodeGetColumn(iterator) == j && nodeGetLine(iterator) == i) {
         Item slist = nodeGetItem(iterator);
-        char *strTempListDescription = (char *) malloc ((shoppingListSize(&slist) * sizeof(Shopping)) + (DESCRIPTION_SIZE * sizeof(char)));
+        char *strTempListDescription = (char *) malloc ((shoppingListSize(&slist) * sizeof(Shopping)) * (DESCRIPTION_SIZE * sizeof(char)));
         strTempListDescription[0] = '\0';
         char *strTempList = (char *) malloc(shoppingListSize(&slist) * sizeof(Shopping));
         strTempList[0] = '\0';
