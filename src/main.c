@@ -3,6 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef linux
+  #include <stdio_ext.h>
+#endif
+
+
 int main() {
 
   SpMatrix matrix;
@@ -10,7 +15,13 @@ int main() {
   char arg[64];
 
   while (!exit) {
-    system("cls");
+    
+    #ifdef _WIN32
+      system("cls");
+    #else
+      system("clear");
+    #endif
+
     printf("\nMENU\n1- Cria matriz\n2- Mostra matriz\n3- Compras por cliente\n4- Compras por produto\n0- sair\nDigite o numero da opcao desejada: ");
     scanf("%d", &opt);
     printf("\n");
@@ -52,7 +63,11 @@ int main() {
 
     if(!exit) {
       printf("\nPressione ENTER para continuar...");
-      fflush(stdin);
+        #ifdef _WIN32
+          fflush(stdin);
+        #else
+          __fpurge(stdin);
+        #endif
       getchar();
     }
   }

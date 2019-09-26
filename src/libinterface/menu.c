@@ -41,20 +41,14 @@ int initMatrixFromFile(SpMatrix *spMatrix, char *filename) {
           fscanf(file, "%d/%d/%d %d%c", &day, &month, &year, &qttProducts, &detectEnd);
           
           dateInit(&date, day, month, year);
-          if(!dateVerify(date)) {
-            shoppingListFree(&slist);
-            spMatrixFree(spMatrix);
-            return 1;
-          }
+
+          if(dateVerify(date)) {
+            shoppingInit(&shop, date, qttProducts);
+            if(shoppingVerify(shop)) {
+              shoppingListInsert(&slist, shop);
+            }
+          }         
           
-          shoppingInit(&shop, date, qttProducts);
-          if(!shoppingVerify(shop)) {
-            shoppingListFree(&slist);
-            spMatrixFree(spMatrix);
-            return 1;
-          }
-          
-          shoppingListInsert(&slist, shop);
         } while(detectEnd != '\n' && detectEnd != EOF && detectEnd != 0);
         countItems = 0;
         spMatrixInsert(spMatrix, line, col, slist);
