@@ -19,5 +19,6 @@ node_main.o: node_main.c
 	gcc -c node_main.c -o node_main.o
 
 clear:
-	del *.o
+	rm *.o
+# del *.o
 	

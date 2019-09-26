@@ -18,3 +18,4 @@ shoppingList_main.o: shoppingList_main.c
 
 clear:
 	rm *.o
+# del *.o
